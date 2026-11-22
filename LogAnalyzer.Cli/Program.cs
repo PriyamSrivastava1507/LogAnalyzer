@@ -1,21 +1,9 @@
 ﻿using LogAnalyzer.Core;
 
-List<string> lines =
-[
-    "2026-11-21 10:42:13 ERROR AuthService Login failed",
-    "hello",
-    "not-a-date 10:42:13 INFO Db Connected"
-];
+var path = args.Length > 0 ? args[0] : "sample.log";
+var result = LogReader.ReadFile(path);
 
-foreach (var line in lines)
-{
-    try
-    {
-        var entry = LogParser.Parse(line);
-        Console.WriteLine(entry);
-    }
-    catch (LogParseException ex)
-    {
-        Console.WriteLine($"Skipped bad line: {ex.Message} -> \"{ex.Line}\"");
-    }
-}
+Console.WriteLine($"Parsed {result.Entries.Count} entries, skipped {result.BadLines.Count} bad lines.");
+
+foreach (var entry in result.Entries)
+    Console.WriteLine(entry);
