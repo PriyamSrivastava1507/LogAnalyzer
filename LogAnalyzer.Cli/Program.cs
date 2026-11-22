@@ -36,3 +36,16 @@ Console.WriteLine();
 Console.WriteLine("Entries by hour (all files):");
 foreach (var (hour, count) in LogStats.CountBy(allEntries, e => e.TimeStamp.Hour))
     Console.WriteLine($"  {hour}: {count}");
+
+Console.WriteLine();
+Console.WriteLine("Warnings and above (all files):");
+foreach (var entry in allEntries.AtLevel(LogLevel.Warn))
+    Console.WriteLine($"  {entry.TimeStamp:HH:mm:ss} {entry.Level} {entry.Source}: {entry.Message}");
+
+var start = new DateTime(2026, 11, 21, 10, 40, 0);
+var end = new DateTime(2026, 11, 21, 10, 50, 0);
+
+Console.WriteLine();
+Console.WriteLine("AuthService errors between 10:40 and 10:50:");
+foreach (var entry in allEntries.FromSource("authservice").AtLevel(LogLevel.Error).Between(start, end))
+    Console.WriteLine($"  {entry.TimeStamp:HH:mm:ss} {entry.Message}");
