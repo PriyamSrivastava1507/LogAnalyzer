@@ -6,8 +6,8 @@ public static class LogReader
 {
     public static ReadResult ReadFile(string path)
     {
-        List<LogEntry> entries = [];
-        List<string> badLines = [];
+        var entries = new List<LogEntry>();
+        var badLines = new List<string>();
 
         foreach (var line in File.ReadLines(path))
         {
