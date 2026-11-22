@@ -24,11 +24,15 @@ var allEntries = results.Values.SelectMany(r => r.Entries).ToList();
 
 Console.WriteLine();
 Console.WriteLine("Entries by level (all files):");
-foreach (var (level, count) in LogStats.CountByLevel(allEntries))
+foreach (var (level, count) in LogStats.CountBy(allEntries, e => e.Level))
     Console.WriteLine($"  {level}: {count}");
 
 Console.WriteLine();
 Console.WriteLine("Entries by Source (all files):");
-foreach (var (source, count) in LogStats.CountBySource(allEntries))
+foreach (var (source, count) in LogStats.CountBy(allEntries, e => e.Source))
     Console.WriteLine($"  {source}: {count}");
 
+Console.WriteLine();
+Console.WriteLine("Entries by hour (all files):");
+foreach (var (hour, count) in LogStats.CountBy(allEntries, e => e.TimeStamp.Hour))
+    Console.WriteLine($"  {hour}: {count}");

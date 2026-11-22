@@ -2,15 +2,9 @@ namespace LogAnalyzer.Core;
 
 public static class LogStats
 {
-    public static IEnumerable<(string Level, int Count)> CountByLevel(IEnumerable<LogEntry> entries) =>
+    public static IEnumerable<(TKey Key, int Count)> CountBy<TKey>(IEnumerable<LogEntry> entries, Func<LogEntry, TKey> keySelector) =>
         entries
-            .GroupBy(e => e.Level)
+            .GroupBy(keySelector)
             .Select(g => (Level: g.Key, Count: g.Count()))
             .OrderByDescending(x => x.Count);
-
-    public static IEnumerable<(string Source, int Count)> CountBySource(IEnumerable<LogEntry> entries) =>
-    entries
-        .GroupBy(e => e.Source)
-        .Select(g => (Source: g.Key, Count: g.Count()))
-        .OrderByDescending(x => x.Count);
 }
