@@ -1,7 +1,5 @@
 ﻿using LogAnalyzer.Core;
 
-ILogParser parser = new PlainTextLogParser();
-
 var paths = args.Length > 0 ? args : ["sample.log"];
 var results = new Dictionary<string, ReadResult>();
 
@@ -9,7 +7,7 @@ foreach (var path in paths)
 {
     try
     {
-        results[path] = LogReader.ReadFile(path, parser);
+        results[path] = LogReader.ReadFile(path, LogParserSelector.Select(path));
     }
     catch (FileNotFoundException)
     {
