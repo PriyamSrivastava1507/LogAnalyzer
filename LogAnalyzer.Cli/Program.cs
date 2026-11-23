@@ -65,8 +65,8 @@ Console.WriteLine("Warnings and above (all files):");
 foreach (var entry in allEntries.AtLevel(LogLevel.Warn))
     ConsoleHelpers.PrintEntry(entry, criticalSources);
 
-var start = new DateTime(2026, 11, 21, 10, 40, 0);
-var end = new DateTime(2026, 11, 21, 10, 50, 0);
+var start = new DateTimeOffset(2026, 11, 21, 10, 40, 0, TimeSpan.Zero);
+var end = new DateTimeOffset(2026, 11, 21, 10, 50, 0, TimeSpan.Zero);
 
 Console.WriteLine();
 Console.WriteLine("AuthService errors between 10:40 and 10:50:");

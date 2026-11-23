@@ -15,7 +15,7 @@ public class JsonLogParser : LogParserBase
             //here root means the top element
             var root = doc.RootElement;
 
-            var timestamp = root.GetProperty("timestamp").GetDateTime();
+            var timestamp = ParseTimeStamp(root.GetProperty("timestamp").GetString() ?? "", line);
             var levelText = root.GetProperty("level").GetString() ?? "";
             var source = root.GetProperty("source").GetString() ?? "";
             var message = root.GetProperty("message").GetString() ?? "";

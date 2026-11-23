@@ -1,3 +1,5 @@
+using System.Globalization;
+
 namespace LogAnalyzer.Core;
 
 //We have created a abstract class which will be inherited by JsonParser and PlainTextParser instead of directly inheriting ILogParser.
@@ -15,5 +17,13 @@ public abstract class LogParserBase : ILogParser
             throw new LogParseException($"Unknown log level: '{text}'.", line);
 
         return level;
+    }
+
+    protected static DateTimeOffset ParseTimeStamp(string text, string line)
+    {
+        if (!DateTimeOffset.TryParse(text, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var timestamp))
+            throw new LogParseException($"Invalid timestamp: '{text}'.", line);
+
+        return timestamp;
     }
 }
