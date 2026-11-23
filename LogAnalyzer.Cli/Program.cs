@@ -1,4 +1,20 @@
-﻿using LogAnalyzer.Core;
+﻿using LogAnalyzer.Cli;
+using LogAnalyzer.Core;
+
+var criticalSources = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
+{
+    // Data
+    "Db", "Database", "Sql", "Postgres", "MySql", "Mongo", "Redis", "Cache", "Storage", "Disk",
+
+    // Security and identity
+    "Auth", "AuthService", "Security", "Firewall", "Identity", "Oauth",
+
+    // Business-critical services
+    "Api", "Gateway", "Payment", "Payments", "Billing", "Checkout", "Order",
+
+    // Infrastructure
+    "Network", "Dns", "Kernel", "Memory", "Cpu", "Scheduler", "Queue", "Broker", "Kafka",
+};
 
 var paths = args.Length > 0 ? args : ["sample.log"];
 var results = new Dictionary<string, ReadResult>();
@@ -47,7 +63,7 @@ foreach (var (hour, count) in allEntries.CountBySelector(e => e.TimeStamp.Hour))
 Console.WriteLine();
 Console.WriteLine("Warnings and above (all files):");
 foreach (var entry in allEntries.AtLevel(LogLevel.Warn))
-    Console.WriteLine($"  {entry.TimeStamp:HH:mm:ss} {entry.Level} {entry.Source}: {entry.Message}");
+    ConsoleHelpers.PrintEntry(entry, criticalSources);
 
 var start = new DateTime(2026, 11, 21, 10, 40, 0);
 var end = new DateTime(2026, 11, 21, 10, 50, 0);
