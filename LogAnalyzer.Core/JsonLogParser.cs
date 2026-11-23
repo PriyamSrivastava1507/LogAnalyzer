@@ -2,9 +2,9 @@ using System.Text.Json;
 
 namespace LogAnalyzer.Core;
 
-public class JsonLogParser : ILogParser
+public class JsonLogParser : LogParserBase
 {
-    public LogEntry Parse(string line)
+    public override LogEntry Parse(string line)
     {
         try
         {
@@ -20,8 +20,7 @@ public class JsonLogParser : ILogParser
             var source = root.GetProperty("source").GetString() ?? "";
             var message = root.GetProperty("message").GetString() ?? "";
 
-            if (!Enum.TryParse<LogLevel>(levelText, ignoreCase: true, out var level) || !Enum.IsDefined(level))
-                throw new LogParseException($"Unknown log level: '{levelText}'.", line);
+            var level = ParseLevel(levelText, line);
 
             return new LogEntry(timestamp, level, source, message);
         }

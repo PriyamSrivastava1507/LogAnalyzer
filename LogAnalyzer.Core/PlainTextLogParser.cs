@@ -1,8 +1,8 @@
 namespace LogAnalyzer.Core;
 
-public class PlainTextLogParser : ILogParser
+public class PlainTextLogParser : LogParserBase
 {
-    public LogEntry Parse(string line)
+    public override LogEntry Parse(string line)
     {
         var parts = line.Split(' ', 5);
 
@@ -12,8 +12,7 @@ public class PlainTextLogParser : ILogParser
         if (!DateTime.TryParse($"{parts[0]} {parts[1]}", out var timestamp))
             throw new LogParseException($"Invalid timestamp: '{parts[0]} {parts[1]}'.", line);
 
-        if (!Enum.TryParse<LogLevel>(parts[2], ignoreCase: true, out var level) || !Enum.IsDefined(level))
-            throw new LogParseException($"Unknown log level: '{parts[2]}'.", line);
+        var level = ParseLevel(parts[2], line);
 
         return new LogEntry(timestamp, level, parts[3], parts[4]);
     }
