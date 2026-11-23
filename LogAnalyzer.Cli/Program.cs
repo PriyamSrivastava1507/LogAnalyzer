@@ -22,21 +22,28 @@ foreach (var (path, result) in results)
     Console.WriteLine($"{path}: {result.Entries.Count} entries, {result.BadLines.Count} bad lines");
 }
 
-var allEntries = results.Values.SelectMany(r => r.Entries).ToList();
+var allEntries = results.AllEntries().ToList();
 
 Console.WriteLine();
 Console.WriteLine("Entries by level (all files):");
-foreach (var (level, count) in LogStats.CountBy(allEntries, e => e.Level))
+foreach (var (level, count) in allEntries.CountBySelector(e => e.Level))
     Console.WriteLine($"  {level}: {count}");
+
+var singleEntry = results.EntriesFrom(["sample.log"]);
+
+Console.WriteLine();
+Console.WriteLine("Entries from single file (sample.log)");
+foreach (var (level, count) in singleEntry.CountBySelector(e => e.Level))
+    Console.WriteLine($" {level}: {count}");
 
 Console.WriteLine();
 Console.WriteLine("Entries by Source (all files):");
-foreach (var (source, count) in LogStats.CountBy(allEntries, e => e.Source))
+foreach (var (source, count) in allEntries.CountBySelector(e => e.Source))
     Console.WriteLine($"  {source}: {count}");
 
 Console.WriteLine();
 Console.WriteLine("Entries by hour (all files):");
-foreach (var (hour, count) in LogStats.CountBy(allEntries, e => e.TimeStamp.Hour))
+foreach (var (hour, count) in allEntries.CountBySelector(e => e.TimeStamp.Hour))
     Console.WriteLine($"  {hour}: {count}");
 
 Console.WriteLine();
