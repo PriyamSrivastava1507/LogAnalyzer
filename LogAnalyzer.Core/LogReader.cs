@@ -4,7 +4,7 @@ public record ReadResult(List<LogEntry> Entries, List<string> BadLines);
 
 public static class LogReader
 {
-    public static ReadResult ReadFile(string path)
+    public static ReadResult ReadFile(string path, ILogParser parser)
     {
         var entries = new List<LogEntry>();
         var badLines = new List<string>();
@@ -16,7 +16,7 @@ public static class LogReader
 
             try
             {
-                entries.Add(LogParser.Parse(line));
+                entries.Add(parser.Parse(line));
             }
 
             catch (LogParseException ex)

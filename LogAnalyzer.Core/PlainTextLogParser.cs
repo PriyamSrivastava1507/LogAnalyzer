@@ -1,8 +1,8 @@
 namespace LogAnalyzer.Core;
 
-public static class LogParser
+public class PlainTextLogParser : ILogParser
 {
-    public static LogEntry Parse(string line)
+    public LogEntry Parse(string line)
     {
         var parts = line.Split(' ', 5);
 
