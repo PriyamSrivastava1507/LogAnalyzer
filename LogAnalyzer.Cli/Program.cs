@@ -72,3 +72,8 @@ Console.WriteLine();
 Console.WriteLine("AuthService errors between 10:40 and 10:50:");
 foreach (var entry in allEntries.FromSource("authservice").AtLevel(LogLevel.Error).Between(start, end))
     Console.WriteLine($"  {entry.TimeStamp:HH:mm:ss} {entry.Message}");
+
+Console.WriteLine();
+Console.WriteLine("Entries for requestId req-1:");
+foreach (var entry in allEntries.WithField("requestId", "req-1"))
+    Console.WriteLine($"  {entry.TimeStamp:HH:mm:ss} {entry.Source}: {entry.Message}");

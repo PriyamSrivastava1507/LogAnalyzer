@@ -10,4 +10,9 @@ public static class LogEntryExtensions
 
     public static IEnumerable<LogEntry> FromSource(this IEnumerable<LogEntry> entries, string source) =>
         entries.Where(e => e.Source.Equals(source, StringComparison.OrdinalIgnoreCase));
+
+    public static IEnumerable<LogEntry> WithField(this IEnumerable<LogEntry> entries, string name, string value) =>
+        entries.Where(e => e.Fields is not null
+        && e.Fields.TryGetValue(name, out var v)
+        && v.Equals(value, StringComparison.OrdinalIgnoreCase));
 }

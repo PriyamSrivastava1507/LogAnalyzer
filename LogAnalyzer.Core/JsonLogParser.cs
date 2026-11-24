@@ -22,7 +22,16 @@ public class JsonLogParser : LogParserBase
 
             var level = ParseLevel(levelText, line);
 
-            return new LogEntry(timestamp, level, source, message);
+            var fields = new Dictionary<string, string>();
+            foreach (var property in root.EnumerateObject())
+            {
+                if (property.Name is "timestamp" or "level" or "source" or "message")
+                    continue;
+
+                fields[property.Name] = property.Value.ToString();
+            }
+
+            return new LogEntry(timestamp, level, source, message, fields.Count > 0 ? fields : null);
         }
         catch (Exception ex) when (ex is JsonException or KeyNotFoundException or InvalidOperationException or FormatException)
         {
