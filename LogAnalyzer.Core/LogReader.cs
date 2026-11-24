@@ -6,10 +6,15 @@ public static class LogReader
 {
     public static ReadResult ReadFile(string path, ILogParser parser)
     {
+        using var reader = new StreamReader(path);
+        return Read(reader, parser);
+    }
+    public static ReadResult Read(TextReader reader, ILogParser parser)
+    {
         var entries = new List<LogEntry>();
         var badLines = new List<string>();
 
-        foreach (var line in File.ReadLines(path))
+        while (reader.ReadLine() is { } line)
         {
             if (string.IsNullOrWhiteSpace(line))
                 continue;
