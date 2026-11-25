@@ -1,6 +1,11 @@
 {"timestamp":"2026-11-21T12:00:00","level":"error","source":"Api","message":"Request failed","requestId":"req-1","status":500}
 {"timestamp":"2026-11-21T12:00:05","level":"info","source":"Db","message":"Query ok","requestId":"req-1"}
-{"timestamp":"2026-11-21T12:00:00","level":"error","source":"Api","message":"Request failed"}
-{"timestamp":"2026-11-21T12:00:05","level":"info","source":"Db","message":"Query ok"}
+{"timestamp":"2026-11-21T12:01:30","level":"error","source":"Payment","message":"Card declined","requestId":"req-2","status":402}
+{"timestamp":"2026-11-21T12:02:10","level":"info","source":"Db","message":"Slow query","requestId":"req-2"}
+{"timestamp":"2026-11-21T12:03:00","level":"warn","source":"Cache","message":"Eviction rate high"}
+{"timestamp":"2026-11-21T12:04:15","level":"debug","source":"Api","message":"Cache miss for user profile","requestId":"req-3"}
+{"timestamp":"2026-11-21T12:05:40","level":"error","source":"Db","message":"Connection timeout","requestId":"req-3"}
+{"timestamp":"2026-11-21T12:06:00","level":"info","source":"AuthService","message":"Login succeeded"}
 not json at all
 {"timestamp":"2026-11-21T12:00:09","level":"warn","source":"Cache"}
+{"timestamp":"2026-11-21T12:07:00","level":"fatal","source":"Api","message":"Out of memory"}
