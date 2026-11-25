@@ -11,25 +11,36 @@ public static class LogReader
     }
     public static ReadResult Read(TextReader reader, ILogParser parser)
     {
-        var entries = new List<LogEntry>();
         var badLines = new List<string>();
+        var entries = StreamEntries(reader, parser, badLines.Add).ToList();
+        return new ReadResult(entries, badLines);
+    }
 
+    //Here Action means a function that does not return anything, so it can take any function that doesnot return anything as arguments
+    //If your function returns something then use Func, Func<Input1, Input2, ....,  Output>
+    //to run them, just use .Invoke() on them
+    //the ? after the action name means if it is null skip it
+    public static IEnumerable<LogEntry> StreamEntries(
+        TextReader reader, ILogParser parser, Action<string>? onBadLine = null
+    )
+    {
         while (reader.ReadLine() is { } line)
         {
             if (string.IsNullOrWhiteSpace(line))
                 continue;
 
+            LogEntry entry;
             try
             {
-                entries.Add(parser.Parse(line));
+                entry = parser.Parse(line);
             }
-
             catch (LogParseException ex)
             {
-                badLines.Add(ex.Line);
+                onBadLine?.Invoke(ex.Line);
+                continue;
             }
-        }
 
-        return new(entries, badLines);
+            yield return entry;
+        }
     }
 }

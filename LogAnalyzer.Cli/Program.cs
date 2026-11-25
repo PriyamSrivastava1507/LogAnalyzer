@@ -77,3 +77,15 @@ Console.WriteLine();
 Console.WriteLine("Entries for requestId req-1:");
 foreach (var entry in allEntries.WithField("requestId", "req-1"))
     Console.WriteLine($"  {entry.TimeStamp:HH:mm:ss} {entry.Source}: {entry.Message}");
+
+var errorCount = 0;
+var badCount = 0;
+using (var demoReader = new StreamReader("sample.log"))
+{
+    foreach (var entry in LogReader.StreamEntries(demoReader, new PlainTextLogParser(), _ => badCount++))
+    {
+        if (entry.Level == LogLevel.Error)
+            errorCount++;
+    }
+}
+Console.WriteLine($"Streamed sample.log: {errorCount} errors, {badCount} bad lines");
