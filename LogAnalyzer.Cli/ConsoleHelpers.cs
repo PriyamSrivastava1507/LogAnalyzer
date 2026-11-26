@@ -9,13 +9,14 @@ public static class ConsoleHelpers
         LogLevel.Error => ConsoleColor.Red,
         LogLevel.Warn => ConsoleColor.Yellow,
         LogLevel.Info => ConsoleColor.Green,
+        LogLevel.Fatal => ConsoleColor.Magenta,
         _ => ConsoleColor.Gray
     };
 
     public static void PrintEntry(LogEntry entry, IReadOnlySet<string> criticalSources)
     {
         Console.ForegroundColor = ColorFor(entry.Level);
-        var marker = entry is { Level: LogLevel.Error } && criticalSources.Contains(entry.Source)
+        var marker = entry.Level >= LogLevel.Error && criticalSources.Contains(entry.Source)
             ? $" [{entry.Source.ToUpperInvariant()} ALERT]"
             : "";
         Console.WriteLine($"  {entry.TimeStamp:HH:mm:ss} {entry.Level} {entry.Source}: {entry.Message}{marker}");

@@ -31,6 +31,7 @@ public class PlainTextLogParserTests
     [InlineData("ERROR", LogLevel.Error)]
     [InlineData("error", LogLevel.Error)]
     [InlineData("Warn", LogLevel.Warn)]
+    [InlineData("FATAL", LogLevel.Fatal)]
     public void Parse_LevelIsCaseInsensitive(string text, LogLevel expected)
     {
         var entry = _parser.Parse($"2026-11-21 10:42:13 {text} Api msg");

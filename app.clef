@@ -1,0 +1,6 @@
+{"@t":"2026-11-21T14:00:00.0000000Z","@mt":"Application started","SourceContext":"MyApp.Program"}
+{"@t":"2026-11-21T14:00:05.1234567Z","@mt":"User {UserId} logged in","@m":"User 42 logged in","@l":"Debug","UserId":42,"SourceContext":"MyApp.AuthService"}
+{"@t":"2026-11-21T14:00:09.5000000Z","@mt":"Payment failed for {OrderId}","@m":"Payment failed for 7","@l":"Error","OrderId":7,"@x":"System.TimeoutException: timed out","SourceContext":"MyApp.PaymentService"}
+{"@t":"2026-11-21T14:01:00.0000000Z","@mt":"Disk almost full","@l":"Warning","SourceContext":"MyApp.Monitor"}
+{"@t":"2026-11-21T14:02:00.0000000Z","@mt":"Unhandled crash","@l":"Fatal"}
+not json

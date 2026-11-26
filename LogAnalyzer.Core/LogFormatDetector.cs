@@ -28,9 +28,10 @@ public static class LogFormatDetector
 
         ILogParser[] candidates =
         [
+          new SerilogJsonParser(),
           new JsonLogParser(),
           new AccessLogParser(),
-          new PlainTextLogParser()
+          new PlainTextLogParser(),
         ];
 
         var (bestParser, bestHits) = candidates
