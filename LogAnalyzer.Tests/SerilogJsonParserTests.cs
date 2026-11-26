@@ -55,4 +55,28 @@ public class SerilogJsonParserTests
 
         Assert.IsType<SerilogJsonParser>(parser);
     }
+
+    [Fact]
+    public void Parse_RendersTemplateWhenNoRenderedMessage()
+    {
+        var entry = _parser.Parse("""{"@t":"2026-11-21T14:00:00Z","@mt":"User {UserId} paid {Amount:N2}","UserId":42,"Amount":12.5}""");
+
+        Assert.Equal("User 42 paid 12.5", entry.Message);
+    }
+
+    [Fact]
+    public void Parse_KeepsTokenWhenPropertyIsMissing()
+    {
+        var entry = _parser.Parse("""{"@t":"2026-11-21T14:00:00Z","@mt":"Hello {Nobody}"}""");
+
+        Assert.Equal("Hello {Nobody}", entry.Message);
+    }
+
+    [Fact]
+    public void Parse_PrefersRenderedMessage()
+    {
+        var entry = _parser.Parse("""{"@t":"2026-11-21T14:00:00Z","@mt":"User {UserId}","@m":"User 7 (rendered)","UserId":42}""");
+
+        Assert.Equal("User 7 (rendered)", entry.Message);
+    }
 }

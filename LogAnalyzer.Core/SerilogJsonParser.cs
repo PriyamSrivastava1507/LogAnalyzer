@@ -1,8 +1,9 @@
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace LogAnalyzer.Core;
 
-public class SerilogJsonParser : LogParserBase
+public partial class SerilogJsonParser : LogParserBase
 {
     private static LogLevel MapLevel(string? text, string line) => text switch
     {
@@ -15,6 +16,16 @@ public class SerilogJsonParser : LogParserBase
         _ => throw new LogParseException($"Unknown Serilog level: '{text}'.", line)
     };
 
+    [GeneratedRegex(@"\{(?<name>[@$]?\w+)(?:[,:][^}]*)?\}")]
+    private static partial Regex TemplateToken();
+
+    private static string RenderTemplate(string template, JsonElement root) =>
+        TemplateToken().Replace(template, match =>
+        {
+            var name = match.Groups["name"].Value.TrimStart('@', '$');
+            return root.TryGetProperty(name, out var value) ? value.ToString() : match.Value;
+        });
+
     public override LogEntry Parse(string line)
     {
         try
@@ -25,9 +36,13 @@ public class SerilogJsonParser : LogParserBase
             var timestamp = ParseTimeStamp(root.GetProperty("@t").GetString() ?? "", line);
             var level = MapLevel(root.TryGetProperty("@l", out var l) ? l.GetString() : null, line);
 
-            var message = root.TryGetProperty("@m", out var rendered)
-                ? rendered.GetString()
-                : root.TryGetProperty("@mt", out var template) ? template.GetString() : null;
+            string? message;
+            if (root.TryGetProperty("@m", out var rendered))
+                message = rendered.GetString();
+            else if (root.TryGetProperty("@mt", out var template))
+                message = RenderTemplate(template.GetString() ?? "", root);
+            else
+                message = null;
 
             var source = root.TryGetProperty("SourceContext", out var context) ? context.GetString() : null;
 

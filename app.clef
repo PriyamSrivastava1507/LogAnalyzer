@@ -4,3 +4,5 @@
 {"@t":"2026-11-21T14:01:00.0000000Z","@mt":"Disk almost full","@l":"Warning","SourceContext":"MyApp.Monitor"}
 {"@t":"2026-11-21T14:02:00.0000000Z","@mt":"Unhandled crash","@l":"Fatal"}
 not json
+{"@t":"2026-11-21T14:03:00.0000000Z","@mt":"Order {OrderId} total {Total:N2} for {@Customer}","@l":"Warning","OrderId":99,"Total":12.5,"Customer":{"Name":"Ana"},"SourceContext":"MyApp.OrderService"}
+{"@t":"2026-11-21T14:04:00.0000000Z","@mt":"Missing {Nothing} here","@l":"Warning","SourceContext":"MyApp.Monitor"}
