@@ -38,4 +38,13 @@ public class PlainTextLogParserTests
 
         Assert.Equal(expected, entry.Level);
     }
+
+    [Theory]
+    [InlineData("2026-11-21 10:42:13 ERROR Api x", true)]
+    [InlineData("   at MyApp.Run()", false)]
+    [InlineData("System.InvalidOperationException: Boom", false)]
+    public void IsRecordStart_RecognizesTimestampedLines(string line, bool expected)
+    {
+        Assert.Equal(expected, _parser.IsRecordStart(line));
+    }
 }

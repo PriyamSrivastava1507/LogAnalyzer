@@ -1,7 +1,14 @@
+using System.Text.RegularExpressions;
+
 namespace LogAnalyzer.Core;
 
-public class PlainTextLogParser : LogParserBase
+public partial class PlainTextLogParser : LogParserBase
 {
+    [GeneratedRegex(@"^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}")]
+    private static partial Regex RecordStart();
+
+    public override bool IsRecordStart(string line) => RecordStart().IsMatch(line);
+
     public override LogEntry Parse(string line)
     {
         var parts = line.Split(' ', 5);

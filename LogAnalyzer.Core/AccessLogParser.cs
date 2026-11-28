@@ -3,6 +3,9 @@ using System.Text.RegularExpressions;
 
 namespace LogAnalyzer.Core;
 
+//Here partial class means that the class code is broken up and is in different places, same with partial function, you have given the definition here but the actual code is in different file
+//GeneratedRegex is used to create the regular expression at compile time instead of runtime, benefits are that, if the regular expression is invalid the build will fail at compilation which helps in early detection also better performance.
+//GeneratedRegex need to be used with partial, because the code for regex is added to the method during build time in a seperate location or file.
 public partial class AccessLogParser : LogParserBase
 {
     [GeneratedRegex("""^(?<ip>\S+) \S+ (?<user>\S+) \[(?<time>[^\]]+)\] "(?<method>\S+) (?<path>\S+)[^"]*" (?<status>\d{3}) (?<bytes>\S+)(?: "(?<referer>[^"]*)" "(?<agent>[^"]*)")?$""")]

@@ -11,6 +11,8 @@ public abstract class LogParserBase : ILogParser
 {
     public abstract LogEntry Parse(string line);
 
+    public virtual bool IsRecordStart(string line) => true;
+
     protected static LogLevel ParseLevel(string text, string line)
     {
         if (!Enum.TryParse<LogLevel>(text, ignoreCase: true, out var level) || !Enum.IsDefined(level))

@@ -16,6 +16,33 @@ public static class LogReader
         return new ReadResult(entries, badLines);
     }
 
+    private static IEnumerable<string> GroupRecords(TextReader reader, ILogParser parser)
+    {
+        string? current = null;
+
+        while (reader.ReadLine() is { } line)
+        {
+            if (string.IsNullOrWhiteSpace(line))
+                continue;
+
+            if (current is null || parser.IsRecordStart(line))
+            {
+                if (current is not null)
+                    yield return current;
+
+                current = line;
+            }
+            else
+            {
+                current += "\n" + line;
+            }
+        }
+
+        if (current is not null)
+            yield return current;
+    }
+
+
     //Here Action means a function that does not return anything, so it can take any function that doesnot return anything as arguments
     //If your function returns something then use Func, Func<Input1, Input2, ....,  Output>
     //to run them, just use .Invoke() on them
@@ -24,15 +51,12 @@ public static class LogReader
         TextReader reader, ILogParser parser, Action<string>? onBadLine = null
     )
     {
-        while (reader.ReadLine() is { } line)
+        foreach (var record in GroupRecords(reader, parser))
         {
-            if (string.IsNullOrWhiteSpace(line))
-                continue;
-
             LogEntry entry;
             try
             {
-                entry = parser.Parse(line);
+                entry = parser.Parse(record);
             }
             catch (LogParseException ex)
             {
